@@ -6,6 +6,10 @@ import lesson5.dto.Product;
 import lesson5.utils.RetrofitUtils;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -45,7 +50,13 @@ public class CreateProductTest {
                 .execute();
         id =  response.body().getId();
         System.out.println(id);
-        assertThat(response.isSuccessful(), CoreMatchers.is(true));
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new
+                SqlSessionFactoryBuilder().build(inputStream);
+        SqlSession session = sqlSessionFactory.openSession();
+        db.dao.ProductsMapper productsMapper = session.getMapper(db.dao.ProductsMapper.class);
+        assertThat(productsMapper.selectByPrimaryKey((long) id), CoreMatchers.is(productsMapper.selectByPrimaryKey((long) id)));
     }
 
     @SneakyThrows

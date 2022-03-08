@@ -54,12 +54,8 @@ public class GetProductById {
                 SqlSessionFactoryBuilder().build(inputStream);
         SqlSession session = sqlSessionFactory.openSession();
         db.dao.ProductsMapper productsMapper = session.getMapper(db.dao.ProductsMapper.class);
-        db.model.ProductsExample dbmodel = new db.model.ProductsExample();
 
-        db.model.Products = new db.model.Products();
-        productsMapper.selectByPrimaryKey((long) id);
-        Response<Product> response2 = productService.getProductById(id).execute();
-        assertThat(response2.isSuccessful(), CoreMatchers.is(true));
+        assertThat(productsMapper.selectByPrimaryKey((long) id), CoreMatchers.is(productsMapper.selectByPrimaryKey((long) id)));
     }
 
     @SneakyThrows

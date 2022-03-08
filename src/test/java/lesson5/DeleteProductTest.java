@@ -23,7 +23,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import lesson6.db.*;
+//import lesson6.db.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -66,13 +66,8 @@ public class DeleteProductTest {
                 SqlSessionFactoryBuilder().build(inputStream);
         SqlSession session = sqlSessionFactory.openSession();
         db.dao.ProductsMapper productsMapper = session.getMapper(db.dao.ProductsMapper.class);
-     //   db.model.ProductsExample dbmodel = new db.model.ProductsExample();
 
-       // db.model.Products = new db.model.Products();
-        productsMapper.deleteByExample(id);
-
-        Response<ResponseBody> response2 = productService.deleteProduct(id).execute();
-        assertThat(response2.isSuccessful(), CoreMatchers.is(true));
+        assertThat(productsMapper.deleteByPrimaryKey((long) id), CoreMatchers.is(1));
     }
 
 

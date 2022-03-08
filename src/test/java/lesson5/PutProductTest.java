@@ -59,13 +59,9 @@ public class PutProductTest {
                 SqlSessionFactoryBuilder().build(inputStream);
         SqlSession session = sqlSessionFactory.openSession();
         db.dao.ProductsMapper productsMapper = session.getMapper(db.dao.ProductsMapper.class);
-        db.model.ProductsExample dbmodel = new db.model.ProductsExample();
 
-        db.model.Products = new db.model.Products();
-        productsMapper.updateByExample(id);
+        assertThat(productsMapper.updateByPrimaryKey(id), CoreMatchers.is(1));
 
-        Response<Product> response2 = productService.modifyProduct(product.withCategoryTitle("Food"), product.withId(id)).execute();
-        assertThat(response2.isSuccessful(), CoreMatchers.is(true));
     }
 
     @SneakyThrows
